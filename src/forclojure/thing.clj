@@ -31,11 +31,12 @@
 
 (defn take-until-decreasing
   [li]
-  (take-while pred li)
+  (get-orig (take-while pred (maketuples li)))
   )
 
 (defn susbseqs [li]
-  (take-while (complement empty?) (iterate drop-until-decreasing li))
+  (map take-until-decreasing
+    (take-while (complement empty?) (iterate drop-until-decreasing li)))
   )
 
 ;(take 10 (iterate drop-until-decreasing ll))
@@ -46,8 +47,8 @@
 
 (deftest dud
   (is (= '(1 2 3 4 5)  (drop-until-decreasing [11 12 13 1 2 3 4 5])))
-  ;(is (= '(11 12 13)  (take-until-decreasing [11 12 13 1 2 3 4 5])))
-  ;(is (= '(0 1 2)  (take-until-decreasing ll)))
+  (is (= '(11 12 13)  (take-until-decreasing [11 12 13 1 2 3 4 5])))
+  (is (= '(0 1 2)  (take-until-decreasing ll)))
   (is (= '(0 1 2 0 1 2 3 4)  (drop-until-decreasing [0 2 4 0 1 2 0 1 2 3 4])))
   (is (= '(0 1 2 3 4)  (drop-until-decreasing '(0 1 2 0 1 2 3 4))))
   (is (= '()  (drop-until-decreasing '(0 1 2 3 4))))
@@ -55,4 +56,6 @@
   (is (= '(2 3)  (drop-until-decreasing l2)))
   (is (= 3 (count (susbseqs ll))))
   (is (= 2 (count (susbseqs l2))))
+  (is (= '([1 5 10] [2 3]) (susbseqs l2)))
+  ()
   )

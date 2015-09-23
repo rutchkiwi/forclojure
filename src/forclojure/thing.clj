@@ -26,13 +26,17 @@
 
 (with-test
   (defn longest-subseq [l]
-    (apply max-key count
-      (susbseqs l)))
+      (let [longest (filter #(> (count %) 1) (susbseqs l))]
+        (if (empty? longest)
+          []
+          (apply max-key count longest)
+          ))
+      )
 
   (is (= [0 1 2 3] (longest-subseq [1 0 1 2 3 0 4 5])))
   (is (= [5 6] (longest-subseq [5 6 1 3 2 7])))
   (is (= [3 4 5] (longest-subseq [2 3 3 4 5])))
-  (is (= [] (longest-subseq [7 6 5 4]))) ;[7 6 5 4]) [])
+  (is (= [] (longest-subseq [7 6 5 4])))                    ;[7 6 5 4]) [])
 
   )
 
@@ -57,5 +61,8 @@
   (is (= '([1 5 10] [2 3]) (susbseqs l2)))
   (is (= '([0 1 2] [0 1 2] [0 1 2 3 4]) (susbseqs ll)))
   (is (= '([1] [0 1 2 3] [0 4 5]) (susbseqs l3)))
-  ()
+  (is (= [] (filter seq? '())))
+  (is (= [] (filter seq? [])))
+  (is (= [] (filter seq? '(1))))
+  (is (= [] (filter seq? [1])))
   )

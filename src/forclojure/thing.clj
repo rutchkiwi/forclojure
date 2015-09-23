@@ -29,7 +29,7 @@
       (let [longest (filter #(> (count %) 1) (susbseqs l))]
         (if (empty? longest)
           []
-          (apply max-key count longest)
+          (reduce (fn [a b] (if (< (count a) (count b)) b a)) longest)
           ))
       )
 

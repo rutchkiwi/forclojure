@@ -1,37 +1,40 @@
 (ns forclojure.thing
   (:require [clojure.test :refer :all]))
 
-(defn maketuples [l] (map vector (drop-last 1 (into [-1] l)) l))
-
-(def pred (fn [[a b]] (< a b)))
-
-(defn get-orig [l]
-  (map last l))
-
-(defn drop-until-decreasing
-  [l]
-  (if (empty? l)
-    '()
-    (get-orig (drop-while pred (maketuples l)))
-    )
-  )
-
-(defn take-until-decreasing
-  [li]
-  (get-orig (take-while pred (maketuples li))))
-
-(defn susbseqs [li]
-  (map take-until-decreasing
-    (take-while (complement empty?) (iterate drop-until-decreasing li))))
 
 (with-test
   (defn longest-subseq [l]
+    (letfn [
+            (maketuples [l] (map vector (drop-last 1 (into [-1] l)) l))
+
+            (pred [[a b]] (< a b))
+
+            (get-orig [l]
+              (map last l))
+
+            (drop-until-decreasing
+              [l]
+              (if (empty? l)
+                '()
+                (get-orig (drop-while pred (maketuples l)))
+                )
+              )
+
+            (take-until-decreasing
+              [li]
+              (get-orig (take-while pred (maketuples li))))
+
+            (susbseqs [li]
+              (map take-until-decreasing
+                (take-while (complement empty?) (iterate drop-until-decreasing li))))
+            ]
+
       (let [longest (filter #(> (count %) 1) (susbseqs l))]
         (if (empty? longest)
           []
           (reduce (fn [a b] (if (< (count a) (count b)) b a)) longest)
-          ))
-      )
+          )))
+    )
 
   (is (= [0 1 2 3] (longest-subseq [1 0 1 2 3 0 4 5])))
   (is (= [5 6] (longest-subseq [5 6 1 3 2 7])))

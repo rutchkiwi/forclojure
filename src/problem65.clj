@@ -1,20 +1,12 @@
-(ns problem65)
+(ns problem65 (:require [clojure.test :refer :all]))
 
-(def test-cases
- '[(= :map (__ {:a 1, :b 2}))
-   (= :list (__ (range (rand-int 20))))
-   (= :vector (__ [1 2 3 4 5 6]))
-   (= :set (__ #{10 (rand-int 5)}))
-   (= [:map :set :vector :list] (map __ [{} #{} [] ()]))])
 
-(def __
-  ; fill in the blank!
-  )
+(defn coll-identifier [col]
+  :unknown)
 
-(defn test-code
-  []
-  (doseq [[test-case test-number] (map vector test-cases (range))]
-    (if (eval `(let [~'__ __]
-                 ~test-case))
-      (printf "Test #%d passed!\n" (inc test-number))
-      (printf "Test #%d failed!\n" (inc test-number)))))
+(deftest coll-identifier-test
+  (is (= :map (coll-identifier {:a 1, :b 2})))
+  (is (= :list (coll-identifier (range (rand-int 20)))))
+  (is (= :vector (coll-identifier [1 2 3 4 5 6])))
+  (is (= :set (coll-identifier #{10 (rand-int 5)})))
+  (is (= [:map :set :vector :list] (map coll-identifier [{} #{} [] ()]))))

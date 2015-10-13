@@ -28,6 +28,7 @@
   (is (= (seqreds conj [1] []) [[1]]))
   )
 
+
 ;(deftest seqred-tests-with-reductions2
 ;  (is (= (reductions + []) [0]))
 ;  (is (= (reductions + 1 []) [1]))
